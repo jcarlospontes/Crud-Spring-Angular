@@ -1,0 +1,18 @@
+<div >
+   <br><br>
+    <form>
+        <div class="form-group">
+            <label>Nome da Música</label>
+            <input (keyup)="onKey_musica($event, name.value)" id="inpt" #name type="text" class="form-control" ngModel maxlength="30">
+            <br>
+            <label>Artista/Banda</label>
+            <input (keyup)="onKey_artista($event, artista.value)" id="inpt" #artista type="text" class="form-control" ngModel maxlength="30">
+            <br>
+            <label>Gênero</label>
+            <input (keyup)="onKey_genero($event, genero.value)" id="inpt" #genero type="text" class="form-control" ngModel maxlength="30">
+            <br>
+        </div>
+        <br>
+            <button [disabled]="!cadastro" type="submit" class="btn btn-light" (click)="cadastrar()">Cadastrar</button> &nbsp; <button class="btn btn-danger" (click)="cancelar()">Voltar</button>
+    </form>
+</div>

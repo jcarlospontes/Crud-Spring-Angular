@@ -1,0 +1,25 @@
+.container {
+    align-items: center;
+}
+.div1{
+    text-align: right;
+    padding-right: 1em;
+    font-weight: bold;
+}
+.div2{
+    text-align: center;
+}
+input[type="text"] {
+    width: 70svh;
+    height: 5svh;
+    border-radius: 1em;
+}
+#btnpost {
+    width: 50svh;
+    border-radius: 1em;
+    border:2px solid;
+}
+
+h1{
+    font-weight: bold;
+}

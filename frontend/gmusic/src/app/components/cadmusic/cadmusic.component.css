@@ -1,0 +1,22 @@
+label{
+    font-weight: bold;
+}
+
+form{
+    margin:auto;
+    height: 75svh;
+    background: black;
+    color:white;
+}
+
+div{
+    background-color: black;
+}
+
+#inpt{
+    margin:auto;
+    text-align: center;
+    height: 5svh;
+    width: 50svh;
+    justify-content: center;
+}

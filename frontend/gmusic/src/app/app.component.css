@@ -1,0 +1,21 @@
+.div1{
+    background-color: white;
+    height: 20svh;
+    margin: 0;
+    top:1ex;
+    box-shadow: 5px 5px 5px 0px rgba(0,0,0,0.3);
+    position: relative;
+}
+.div2{
+    background-color: black;
+    height: 80svh;
+    background-repeat: repeat;
+}
+.div3{
+    height: 100svh;
+    background: black;
+    display: flex;
+    justify-content: center;
+    text-align: left;
+    color:white;
+}

@@ -1,0 +1,17 @@
+<div>
+  <div *ngIf="userService.logado" class="div1">
+    <app-upgmusic></app-upgmusic>
+  </div>
+  <div *ngIf="userService.logado && musicService.cadastrando">
+    <app-cadmusic></app-cadmusic>
+  </div>
+  <div *ngIf="!userService.logado" class="div3">
+    <app-login></app-login>
+  </div>
+  <div *ngIf="userService.logado && musicService.selecionando">
+    <app-selmusic></app-selmusic>
+  </div>
+  <div *ngIf="userService.logado && !musicService.selecionando && !musicService.cadastrando" class="div2">
+      <app-listmusic></app-listmusic>
+  </div>
+</div>

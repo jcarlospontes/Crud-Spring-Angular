@@ -1,0 +1,10 @@
+<div class="container">
+    <div class="div1" >
+       <app-ident></app-ident> &nbsp; <button type="button" (click)="quit()" class="btn btn-dark"> Sair</button>
+    </div>
+    <div class="div2" *ngIf="!musicService.cadastrando && !musicService.selecionando">
+        <button id="btnpost" type="button" class="btn btn-outline-dark" (click)="cadastrar()" >Cadastrar Música</button>
+    </div>
+    <h1 *ngIf="musicService.cadastrando">Cadastrando Música</h1>
+    <h1 *ngIf="musicService.selecionando">Editando Música</h1>
+</div>
