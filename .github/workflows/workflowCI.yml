@@ -29,3 +29,10 @@ jobs:
       run: npm test -- --watch=false --browsers=ChromeHeadless --code-coverage
       env:
         CI: true
+    
+    - name: Uso do SonarCloud
+      uses: SonarSource/sonarcloud-github-action@master
+      env:
+          GITHUB_TOKEN: ${{ secrets.GITHUBTOKEN }}
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+    
