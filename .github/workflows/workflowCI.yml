@@ -26,6 +26,6 @@ jobs:
     - name: Instalando dependencias
       run: npm install
     - name: Testando
-      run: npm run test -- --coverage
+      run: ng test --no-watch --code-coverage
       env:
         CI: true
