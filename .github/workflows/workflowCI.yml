@@ -26,6 +26,6 @@ jobs:
     - name: Instalando dependencias
       run: npm install
     - name: Testando
-      run: npm test
+      run: npm test -- --watch=false --browsers=ChromeHeadless
       env:
         CI: true
