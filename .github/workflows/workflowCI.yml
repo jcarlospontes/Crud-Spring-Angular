@@ -9,10 +9,6 @@ on:
       - main
   workflow_dispatch:
 
-defaults:
-  run:
-    working-directory: frontend/gmusic/
-
 jobs:
   job-CI:
     runs-on: ubuntu-latest
