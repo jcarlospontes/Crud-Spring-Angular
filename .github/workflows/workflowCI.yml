@@ -18,13 +18,11 @@ jobs:
     steps:
     - name: Checkout repo
       uses: actions/checkout@v3
-
-    -name: Obtendo nodejs 16
-     with:
-        node-version: 16.x
-    -name: Instalando dependencias
-     run: npm install
-    -name: Testando
-     run: npm run test -- --coverage
+    - name: Obtendo nodejs 16
+      with: node-version: 16.x
+    - name: Instalando dependencias
+      run: npm install
+    - name: Testando
+      run: npm run test -- --coverage
         env:
           CI: true
