@@ -3,10 +3,10 @@ name: workflowCI
 on:
   push:
     branches:
-      -main
+      - main
   pull:
     branches:
-      -main
+      - main
 
 defaults:
   run:
@@ -15,7 +15,6 @@ defaults:
 jobs:
   job-CI:
     runs-on: ubuntu-latest
-
     steps:
       - name: Checkout repo
         uses: actions/checkout@v3
@@ -26,7 +25,7 @@ jobs:
 
       -name: Instalando dependencias
        run: npm install
-      
+
       -name: Testando
        run: npm run test -- --coverage
        env:
