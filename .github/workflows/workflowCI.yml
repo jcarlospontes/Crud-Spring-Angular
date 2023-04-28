@@ -19,6 +19,7 @@ jobs:
     - name: Checkout repo
       uses: actions/checkout@v3
     - name: Obtendo nodejs 16
+      uses: actions/setup-node@v3
       with: node-version: 16.x
     - name: Instalando dependencias
       run: npm install
