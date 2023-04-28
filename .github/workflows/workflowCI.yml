@@ -17,8 +17,8 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      -name: Checkout repo
-       uses: actions/checkout@v3
+      - name: Checkout repo
+        uses: actions/checkout@v3
 
       -name: Obtendo nodejs 16
        with:
@@ -26,7 +26,7 @@ jobs:
 
       -name: Instalando dependencias
        run: npm install
-
+      
       -name: Testando
        run: npm run test -- --coverage
        env:
