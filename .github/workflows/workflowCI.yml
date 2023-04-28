@@ -26,5 +26,5 @@ jobs:
       run: npm install
     - name: Testando
       run: npm run test -- --coverage
-        env:
-          CI: true
+      env:
+        CI: true
