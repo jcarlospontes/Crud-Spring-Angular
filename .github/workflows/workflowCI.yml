@@ -16,6 +16,16 @@ defaults:
 jobs:
   job-CI:
     runs-on: ubuntu-latest
+    services:
+      mysql:
+        image: mysql:5.7
+        env:
+          MYSQL_DATABASE: dchat
+          MYSQL_USER: ${{ secrets.MYSQL_USER }}
+          MYSQL_PASSWORD: ${{ secrets.MYSQL_PASS }}
+          MYSQL_ROOT_PASSWORD: ${{ secrets.MYSQL_PASS }}
+        ports:
+          - 33306:3306
     steps:
     - name: Checkout repo
       uses: actions/checkout@v3
@@ -23,16 +33,13 @@ jobs:
     - name: Usando Java
       uses: actions/setup-java@v3
       with:
-        java-version: 17
+        java-version: 11
         distribution: 'adopt'
         cache: maven
 
     - name: Checando teste e coverage
       run: |
-        cd ..
-        cd ..
-        cd backend/api/
-        pwd
+        cd /home/runner/work/Crud-Spring-Angular/Crud-Spring-Angular/backend/api
         mvn -v
         mvn clean install
 
