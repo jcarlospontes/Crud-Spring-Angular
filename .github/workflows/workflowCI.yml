@@ -20,19 +20,20 @@ jobs:
     - name: Checkout repo
       uses: actions/checkout@v3
 
-    -name: Usando Java
+    - name: Usando Java
       uses: actions/setup-java@v3
       with:
         java-version: 11
         distribution: 'adopt'
-    
-    -name: Usando Maven
-      uses: stCarolas/setup-maven@4.4
-      with:
-        maven-version: 3.8.2
+        cache: maven
 
-    -name: Checando teste e coverage
-      run: mvn clean install
+    - name: Checando teste e coverage
+      run: |
+        cd ..
+        cd ..
+        cd backend/gmusic/
+        mvn -v
+        mvn clean install
 
     - name: Obtendo nodejs 16
       uses: actions/setup-node@v3
