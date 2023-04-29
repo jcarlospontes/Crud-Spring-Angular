@@ -1,9 +1,5 @@
 name: workflowCD
 
-on:
-    
-  workflow_dispatch:
-
 services:
   mysql:
     image: mysql:5.7
@@ -39,18 +35,18 @@ jobs:
       with: 
         node-version: 16.x
 
-    -name: Usando Java
+    - name: Usando Java
       uses: actions/setup-java@v3
       with:
         java-version: 11
         distribution: 'adopt'
     
-    -name: Usando Maven
+    - name: Usando Maven
       uses: stCarolas/setup-maven@4.4
       with:
         maven-version: 3.8.2
 
-    -name: Checando teste e coverage
+    - name: Checando teste e coverage
       run: mvn clean install
 
     - name: Instalando dependencias
