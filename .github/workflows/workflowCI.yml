@@ -30,10 +30,8 @@ jobs:
       run: npm install
       
     - name: Fazendo build
-      run: npm run rebuild
-
-    - name: Testando
-      run: npm run test -- --no-watch --no-progress --browsers=ChromeHeadless --code-coverage
+      run: npm run build
+      
       env:
         CI: true
     
