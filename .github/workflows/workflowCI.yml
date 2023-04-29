@@ -31,7 +31,8 @@ jobs:
       run: |
         cd ..
         cd ..
-        cd backend/gmusic/
+        cd backend/api/
+        pwd
         mvn -v
         mvn clean install
 
