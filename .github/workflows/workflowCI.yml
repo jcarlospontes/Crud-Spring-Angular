@@ -28,9 +28,12 @@ jobs:
 
     - name: Instalando dependencias
       run: npm install
+      
+    - name: Fazendo build
+      run: npm run build
 
     - name: Testando
-      run: npm run test -- --code-coverage
+      run: npm run test -- --no-watch --no-progress --browsers=ChromeHeadless --code-coverage
       env:
         CI: true
     
