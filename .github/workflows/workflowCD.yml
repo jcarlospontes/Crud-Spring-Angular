@@ -56,8 +56,8 @@ jobs:
           ssh google-cloud 'sudo systemctl stop nginx.service'
           ssh google-cloud 'sudo rm -rf /repository/Crud-Spring-Angular/frontend/gmusic'
           cd frontend/gmusic/dist
-          scp -r gmusic google-cloud:/home/github/gmusic
-          ssh google-cloud 'sudo systemctl stop nginx.service'
+          scp -r gmusic google-cloud:/home/github/
+          ssh google-cloud 'sudo systemctl restart nginx'
           ssh google-cloud 'sudo systemctl start exercicioworkflow'
       
       - name: Uso do SonarCloud
