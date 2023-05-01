@@ -38,7 +38,8 @@ jobs:
         
       - name: Instalando dependencias e angular
         run: |
-          npm install && npm install -g @angular/cli
+          npm install
+          npm install -g @angular/cli
           ng config -g cli.warnings.versionMismatch false
           ng analytics off
       
