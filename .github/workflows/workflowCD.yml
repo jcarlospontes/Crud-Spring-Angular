@@ -17,49 +17,49 @@ jobs:
     steps:
       - name: Setando conexao SSH do Google Cloud
         run: |
-	  mkdir -p ~/.ssh/	
-	  echo "$SSH_KEY" > ~/.ssh/google-cloud.key
-	  chmod 600 ~/.ssh/google-cloud.key
-	  cat >>~/.ssh/config <<END
-	  Host google-cloud
-	    HostName $SSH_HOST
-	    User $SSH_USER
-	    IdentityFile ~/.ssh/google-cloud.key
-	    StrictHostKeyChecking no
-	  END
-	env:
-	  SSH_USER: ${{ secrets.GOOGLE_CLOUD_USER }}
-	  SSH_KEY: ${{ secrets.GOOGLE_CLOUD_SSH }}
-	  SSH_HOST: ${{ secrets.GOOGLE_CLOUD_IP }}
+          mkdir -p ~/.ssh/	
+          echo "$SSH_KEY" > ~/.ssh/google-cloud.key
+          chmod 600 ~/.ssh/google-cloud.key
+          cat >>~/.ssh/config <<END
+          Host google-cloud
+            HostName $SSH_HOST
+            User $SSH_USER
+            IdentityFile ~/.ssh/google-cloud.key
+            StrictHostKeyChecking no
+          END
+        env:
+          SSH_USER: ${{ secrets.GOOGLE_CLOUD_USER }}
+          SSH_KEY: ${{ secrets.GOOGLE_CLOUD_SSH }}
+          SSH_HOST: ${{ secrets.GOOGLE_CLOUD_IP }}
     
-    - name: Checkout repo
-      uses: actions/checkout@v3
+      - name: Checkout repo
+        uses: actions/checkout@v3
 
-    - name: Obtendo nodejs 16
-      uses: actions/setup-node@v3
-      with: 
-        node-version: 16.x
+      - name: Obtendo nodejs 16
+        uses: actions/setup-node@v3
+        with: 
+          node-version: 16.x
         
-    - name: Instalando dependencias e angular
-      run: |
-        npm install && npm install -g @angular/cli
-        ng config -g cli.warnings.versionMismatch false
-        ng analytics off
+      - name: Instalando dependencias e angular
+        run: |
+          npm install && npm install -g @angular/cli
+          ng config -g cli.warnings.versionMismatch false
+          ng analytics off
       
-    - name: Fazendo Build
-      run: ng build
+      - name: Fazendo Build
+        run: ng build
       
-    - name: Fazendo Deploy
-    	run: |
-		ssh google-cloud 'sudo systemctl stop segundoexercicio-app'
-		ssh google-cloud 'sudo systemctl stop exercicioworkflow'
-		ssh google-cloud 'sudo rm -rf /repository/Crud-Spring-Angular/frontend/gmusic'
-		scp -r /home/runner/work/Crud-Spring-Angular/frontend/gmusic google-cloud:/home/github/gmusic
-		ssh google-cloud 'sudo start exercicioworkflow'
+      - name: Fazendo Deploy
+        run: |
+          ssh google-cloud 'sudo systemctl stop segundoexercicio-app'
+          ssh google-cloud 'sudo systemctl stop exercicioworkflow'
+          ssh google-cloud 'sudo rm -rf /repository/Crud-Spring-Angular/frontend/gmusic'
+          scp -r /home/runner/work/Crud-Spring-Angular/frontend/gmusic google-cloud:/home/github/gmusic
+          ssh google-cloud 'sudo start exercicioworkflow'
       
-    - name: Uso do SonarCloud
-      uses: SonarSource/sonarcloud-github-action@master
-      env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          SONAR_TOKEN: ${{ secrets.SONARTOKEN }}
+      - name: Uso do SonarCloud
+        uses: SonarSource/sonarcloud-github-action@master
+        env:
+            GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+            SONAR_TOKEN: ${{ secrets.SONARTOKEN }}
     
