@@ -58,7 +58,7 @@ jobs:
           cd frontend/gmusic/dist
           scp -r gmusic google-cloud:/home/github/gmusic
           ssh google-cloud 'sudo systemctl stop nginx.service'
-          ssh google-cloud 'sudo start exercicioworkflow'
+          ssh google-cloud 'sudo systemctl start exercicioworkflow'
       
       - name: Uso do SonarCloud
         uses: SonarSource/sonarcloud-github-action@master
