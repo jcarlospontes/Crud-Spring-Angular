@@ -40,6 +40,8 @@ jobs:
         run: |
           cd frontend/gmusic/
           npm install
+          npm cache clean --force
+          npm cache verify
           npm install -g @angular/cli
           ng config -g cli.warnings.versionMismatch false
           ng analytics off
