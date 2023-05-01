@@ -26,22 +26,22 @@ jobs:
           MYSQL_ROOT_PASSWORD: ${{ secrets.MYSQL_PASS }}
 
     steps:
-    - name: Setando conexao SSH do Google Cloud
-    	run: |
-		mkdir -p ~/.ssh/	
-		echo "$SSH_KEY" > ~/.ssh/google-cloud.key
-		chmod 600 ~/.ssh/google-cloud.key
-		cat >>~/.ssh/config <<END
-		Host google-cloud
-			HostName $SSH_HOST
-			User $SSH_USER
-			IdentityFile ~/.ssh/google-cloud.key
-			StrictHostKeyChecking no
-		END
-      env:
-        SSH_USER: ${{ secrets.GOOGLE_CLOUD_USER }}
-        SSH_KEY: ${{ secrets.GOOGLE_CLOUD_SSH }}
-        SSH_HOST: ${{ secrets.GOOGLE_CLOUD_IP }}
+    	- name: Setando conexao SSH do Google Cloud
+		run: |
+			mkdir -p ~/.ssh/	
+			echo "$SSH_KEY" > ~/.ssh/google-cloud.key
+			chmod 600 ~/.ssh/google-cloud.key
+			cat >>~/.ssh/config <<END
+			Host google-cloud
+				HostName $SSH_HOST
+				User $SSH_USER
+				IdentityFile ~/.ssh/google-cloud.key
+				StrictHostKeyChecking no
+			END
+	      env:
+		SSH_USER: ${{ secrets.GOOGLE_CLOUD_USER }}
+		SSH_KEY: ${{ secrets.GOOGLE_CLOUD_SSH }}
+		SSH_HOST: ${{ secrets.GOOGLE_CLOUD_IP }}
     
     - name: Checkout repo
       uses: actions/checkout@v3
