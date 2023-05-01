@@ -14,17 +14,6 @@ defaults:
 jobs:
   job-CD:
     runs-on: ubuntu-latest
-    services:
-      mysql:
-        image: mysql:5.7
-        ports:
-          - 3306/tcp
-        env:
-          MYSQL_DATABASE: dchat
-          MYSQL_USER: ${{ secrets.MYSQL_USER }}
-          MYSQL_PASSWORD: ${{ secrets.MYSQL_PASS }}
-          MYSQL_ROOT_PASSWORD: ${{ secrets.MYSQL_PASS }}
-
 	steps:
 	  - name: Setando conexao SSH do Google Cloud
 	    run: |
