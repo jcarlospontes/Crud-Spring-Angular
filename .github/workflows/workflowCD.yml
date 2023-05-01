@@ -1,16 +1,18 @@
 name: workflowCD
 
-services:
-  mysql:
-    image: mysql:5.7
-
-    env:
-      MYSQL_DATABASE: dchat
-      MYSQL_USER: ${{ secrets.MYSQL_USER }}
-      MYSQL_PASSWORD: ${{ secrets.MYSQL_PASS }}
-    
-    ports:
-      - 33306:3306
+on:
+  push:
+    branches:
+      - master
+  pull_request:
+    branches:
+      - master
+      
+  workflow_dispatch:
+  
+defaults:
+  run:
+    working-directory: frontend/gmusic/
 
 jobs:
   job-CD:
@@ -27,40 +29,13 @@ jobs:
           MYSQL_ROOT_PASSWORD: ${{ secrets.MYSQL_PASS }}
 
     steps:
+    { secrets.GOOGLE_CLOUD_IP }}
+    
     - name: Checkout repo
       uses: actions/checkout@v3
-
-    - name: Obtendo nodejs 16
-      uses: actions/setup-node@v3
-      with: 
-        node-version: 16.x
-
-    - name: Usando Java
-      uses: actions/setup-java@v3
-      with:
-        java-version: 11
-        distribution: 'adopt'
-    
-    - name: Usando Maven
-      uses: stCarolas/setup-maven@4.4
-      with:
-        maven-version: 3.8.2
-
-    - name: Checando teste e coverage
-      run: mvn clean install
-
-    - name: Instalando dependencias
-      run: npm install
-
-    - name: Testando
-    #pulando teste npm test -- --watch=false --browsers=ChromeHeadless --code-coverage
-      run: echo "teste"
-      env:
-        CI: true
-    
-    - name: Uso do SonarCloud
-      uses: SonarSource/sonarcloud-github-action@master
-      env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          SONAR_TOKEN: ${{ secrets.SONARTOKEN }}
+      
+    - name: Teste
+      run: |
+        echo ${{ github.workspace }}
+        echo $GITHUB_WORKSPACE
     
