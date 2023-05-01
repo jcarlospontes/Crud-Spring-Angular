@@ -45,7 +45,9 @@ jobs:
           ng analytics off
       
       - name: Fazendo Build
-        run: ng build
+        run: |
+          cd frontend/gmusic/
+          ng build
       
       - name: Fazendo Deploy
         run: |
