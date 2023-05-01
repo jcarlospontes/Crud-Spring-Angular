@@ -3,10 +3,10 @@ name: workflowCI
 on:
   push:
     branches:
-      - master
+      - feature-new
   pull_request:
     branches:
-      - master
+      - feature-new
   workflow_dispatch:
   
 defaults:
