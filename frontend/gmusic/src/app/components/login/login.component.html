@@ -1,6 +1,6 @@
 <h1>GMusic</h1>
 <br>
-<label>Avatar</label>
+<label>Avatar:</label>
 <div>
     <button class="btft" #bt1 (click)="selFoto(1, bt1); onKey($event, name.value)"><img src="assets/ic1.png"></button>
     <button class="btft" #bt2 (click)="selFoto(2, bt2); onKey($event, name.value)"><img src="assets/ic2.png"></button>
@@ -10,7 +10,7 @@
 <br>
 <form>
     <div class="form-group">
-        <label>Nome</label>
+        <label>Nome:</label>
         <input (keyup)="onKey($event, name.value)" id="entr" #name type="text" class="form-control" ngModel maxlength="16">
         <br>
     </div>
