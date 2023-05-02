@@ -58,7 +58,7 @@ jobs:
           ssh google-cloud 'sudo rm -fr /home/github/*'
           cd frontend/gmusic/dist
           scp -r gmusic google-cloud:/home/github/
-          ssh google-cloud 'sudo cp /home/github/gmusic/* /usr/share/nginx/html/'
+          ssh google-cloud 'sudo cp -r /home/github/gmusic/* /usr/share/nginx/html/'
           ssh google-cloud 'sudo systemctl start nginx'
       
       - name: Uso do SonarCloud
