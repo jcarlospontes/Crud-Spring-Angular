@@ -11,22 +11,22 @@ jobs:
   job-CD:
     runs-on: ubuntu-latest
     steps:
-#      - name: Setando conexao SSH do Google Cloud
-#        run: |
-#          mkdir -p ~/.ssh/	
-#          echo "$SSH_KEY" > ~/.ssh/google-cloud.key
-#          chmod 600 ~/.ssh/google-cloud.key
-#          cat >>~/.ssh/config <<END
-#          Host google-cloud
-#            HostName $SSH_HOST
-#            User $SSH_USER
-#            IdentityFile ~/.ssh/google-cloud.key
-#            StrictHostKeyChecking no
-#          END
-#        env:
-#          SSH_USER: ${{ secrets.GOOGLE_CLOUD_USER }}
-#          SSH_KEY: ${{ secrets.GOOGLE_CLOUD_SSH }}
-#          SSH_HOST: ${{ secrets.GOOGLE_CLOUD_IP }}
+      - name: Setando conexao SSH do Google Cloud
+        run: |
+          mkdir -p ~/.ssh/	
+          echo "$SSH_KEY" > ~/.ssh/google-cloud.key
+          chmod 600 ~/.ssh/google-cloud.key
+          cat >>~/.ssh/config <<END
+          Host google-cloud
+            HostName $SSH_HOST
+            User $SSH_USER
+            IdentityFile ~/.ssh/google-cloud.key
+            StrictHostKeyChecking no
+          END
+        env:
+          SSH_USER: ${{ secrets.GOOGLE_CLOUD_USER }}
+          SSH_KEY: ${{ secrets.GOOGLE_CLOUD_SSH }}
+          SSH_HOST: ${{ secrets.GOOGLE_CLOUD_IP }}
     
       - name: Checkout repo
         uses: actions/checkout@v3
@@ -51,17 +51,15 @@ jobs:
           cd frontend/gmusic/
           ng build
       
-#      - name: Fazendo Deploy
-#        run: |
-#          ssh google-cloud 'sudo systemctl stop segundoexercicio-app'
-#          ssh google-cloud 'sudo systemctl stop exercicioworkflow'
-#          ssh google-cloud 'sudo systemctl stop nginx.service'
-#          ssh google-cloud 'sudo rm -rf /home/github/gmusic'
-#          cd frontend/gmusic/dist
-#          scp -r gmusic google-cloud:/home/github/
-#          ssh google-cloud 'sudo mv /home/github/gmusic/* /usr/share/nginx/html'
-#          ssh google-cloud 'sudo systemctl start nginx.service'
-#          ssh google-cloud 'sudo systemctl start exercicioworkflow'
+      - name: Fazendo Deploy
+        run: |
+          ssh google-cloud 'sudo systemctl stop nginx'
+          ssh google-cloud 'sudo rm -fr /usr/share/nginx/html/*'
+          ssh google-cloud 'sudo rm -fr /home/github/*'
+          cd frontend/gmusic/dist
+          scp -r gmusic google-cloud:/home/github/
+          ssh google-cloud 'sudo cp /home/github/gmusic/* /usr/share/nginx/html/'
+          ssh google-cloud 'sudo systemctl start nginx'
       
       - name: Uso do SonarCloud
         uses: SonarSource/sonarcloud-github-action@master
