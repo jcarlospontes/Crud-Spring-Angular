@@ -67,6 +67,11 @@ jobs:
         run: |
           cd frontend/gmusic/
           ng build
+          
+      - name: Retirando alteracao para DEV
+        run: |
+          cd frontend/gmusic/src/app/components/login/
+          sed -i '1d' login.component.html
       
       - name: Fazendo Deploy no ambiente de DEV(release)
         run: |
