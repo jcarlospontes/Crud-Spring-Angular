@@ -77,19 +77,3 @@ jobs:
           scp -r gmusic google-cloud:/home/github/dev/
           ssh google-cloud 'sudo cp -r /home/github/dev/gmusic/* /usr/share/nginx/dev/'
           ssh google-cloud 'sudo systemctl start nginx'
-          
-  pull-request:
-      needs: job-CD
-      runs-on: ubuntu-latest
-      steps:
-      - name: Checkout repo
-        uses: actions/checkout@v3
-
-      - name: Criar Pull Request
-        uses: peter-evans/create-pull-request@v3
-        with:
-          token: ${{ secrets.TOKENGIT }}
-          base: master
-          branch: release
-          title: Modificação de exemplo
-          body: Esta modificação é um exemplo
