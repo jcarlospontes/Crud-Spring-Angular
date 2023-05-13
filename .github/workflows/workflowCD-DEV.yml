@@ -49,7 +49,8 @@ jobs:
       - name: Fazendo alteracao para DEV
         run: |
           cd frontend/gmusic/src/app/components/login/
-          sed -i '1 i\Versao DEV' login.component.html
+          agora="$(TZ=America/Sao_Paulo date -d now +'%c')"
+          sed -i '1 i\Ambiente de DEV '"$agora" login.component.html
       
       - name: Fazendo Build DEV
         run: |
