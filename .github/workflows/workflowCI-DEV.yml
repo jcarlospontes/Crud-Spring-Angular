@@ -23,11 +23,20 @@ jobs:
       with: 
         node-version: 16.x
 
-    - name: Instalando dependencias
-      run: npm install
-      
-    - name: Fazendo build
-      run: npm run build
+    - name: Instalando dependencias e angular
+      run: |
+          cd frontend/gmusic/
+          npm install
+          npm cache clean --force
+          npm cache verify
+          npm install -g @angular/cli
+          ng config -g cli.warnings.versionMismatch false
+          ng analytics off
+
+    - name: Fazendo teste de build
+      run: |
+          cd frontend/gmusic/
+          ng build
       
       env:
         CI: true
