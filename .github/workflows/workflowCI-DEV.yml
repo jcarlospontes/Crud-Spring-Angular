@@ -1,4 +1,4 @@
-name: workflowCI
+name: workflowCI-DEV
 
 on:
   push:
