@@ -86,3 +86,4 @@ jobs:
           branch: release
           title: Modificação de exemplo
           body: Esta modificação é um exemplo
+          labels: skip-ci
