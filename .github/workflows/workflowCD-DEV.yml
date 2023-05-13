@@ -72,6 +72,7 @@ jobs:
         uses: peter-evans/create-pull-request@v3
         with:
           token: ${{ secrets.TOKENGIT }}
-          branch: master
+          base: master
+          branch: release
           title: Modificação de exemplo
           body: Esta modificação é um exemplo
