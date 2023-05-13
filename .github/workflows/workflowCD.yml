@@ -1,7 +1,7 @@
 name: workflowCD
 
 on:
-  push:
+  pull_request:
     branches:
       - release
       
