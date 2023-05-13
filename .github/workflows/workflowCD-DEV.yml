@@ -67,11 +67,11 @@ jobs:
           scp -r gmusic google-cloud:/home/github/dev/
           ssh google-cloud 'sudo cp -r /home/github/dev/gmusic/* /usr/share/nginx/dev/'
           ssh google-cloud 'sudo systemctl start nginx'
-            
-      - name: Fazendo pull request para a branch master
+  
+      - name: Criar Pull Request
         uses: peter-evans/create-pull-request@v3
         with:
-          repository: jcarlospontes/Crud-Spring-Angular
-          base: master
-          head: release
-          title: "Criando pull request para master"
+          token: ${{ secrets.TOKENGIT }}
+          branch: master
+          title: Modificação de exemplo
+          body: Esta modificação é um exemplo
