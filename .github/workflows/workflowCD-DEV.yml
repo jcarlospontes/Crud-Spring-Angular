@@ -1,9 +1,10 @@
 name: workflowCD-DEV
 
 on:
-  pull_request:
-    branches:
-      - release
+  workflow_run:
+    workflows: ["workflowCI-DEV"]
+    types:
+      - completed
       
   workflow_dispatch:
 
