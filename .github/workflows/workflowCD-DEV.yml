@@ -2,7 +2,7 @@ name: workflowCD-DEV
 
 on:
   workflow_run:
-    workflows: ["workflowCI-DEV"]
+    workflows: workflowCI-DEV
     types:
       - completed
       
