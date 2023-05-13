@@ -1,7 +1,7 @@
 name: workflowCD-DEV
 
 on:
-  pull_request:
+  push:
     branches:
       - release
       
@@ -45,8 +45,13 @@ jobs:
           npm install -g @angular/cli
           ng config -g cli.warnings.versionMismatch false
           ng analytics off
+          
+      - name: Fazendo alteracao para DEV
+        run: |
+          cd frontend/gmusic/src/app/components/login/
+          sed -i '1 i\Versao DEV' login.component.html
       
-      - name: Fazendo Build
+      - name: Fazendo Build DEV
         run: |
           cd frontend/gmusic/
           ng build
@@ -55,12 +60,28 @@ jobs:
         run: |
           ssh google-cloud 'sudo systemctl stop nginx'
           ssh google-cloud 'sudo rm -fr /usr/share/nginx/dev/*'
-          ssh google-cloud 'sudo rm -fr /home/github/*'
+          ssh google-cloud 'sudo rm -fr /home/github/dev/*'
           cd frontend/gmusic/dist
-          scp -r gmusic google-cloud:/home/github/
-          ssh google-cloud 'sudo cp -r /home/github/gmusic/* /usr/share/nginx/dev/'
+          scp -r gmusic google-cloud:/home/github/dev/
+          ssh google-cloud 'sudo cp -r /home/github/dev/gmusic/* /usr/share/nginx/dev/'
           ssh google-cloud 'sudo systemctl start nginx'
-      
+          
+      - name: Fazendo alteracao para PROD
+        run: |
+          cd frontend/gmusic/src/app/components/login/
+          sed -i '1d' login.component.html
+          
+      - name: Fazendo Build DEV
+        run: |
+          cd frontend/gmusic/
+          ng build
+          
+      - name: Salvando build DEV pronta para deploy
+        run: |
+          ssh google-cloud 'sudo rm -fr /home/github/prod/*'
+          cd frontend/gmusic/dist
+          scp -r gmusic google-cloud:/home/github/prod/
+
       - name: Uso do SonarCloud
         uses: SonarSource/sonarcloud-github-action@master
         env:
