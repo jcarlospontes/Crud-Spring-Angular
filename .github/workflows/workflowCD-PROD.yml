@@ -4,11 +4,14 @@ on:
   pull_request:
     branches:
       - master
+    types:
+      - closed
       
   workflow_dispatch:
 
 jobs:
   job-CD:
+    if: github.event.pull_request.merged == true
     runs-on: ubuntu-latest
     steps:
       - name: Setando conexao SSH do Google Cloud
