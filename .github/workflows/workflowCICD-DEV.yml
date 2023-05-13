@@ -1,17 +1,37 @@
-name: workflowCD-DEV
+name: workflowCICD-DEV
 
 on:
-  workflow_run:
-    workflows: workflowCI-DEV
-    types:
-      - completed
-      
+  push:
+    branches:
+      - release
   workflow_dispatch:
 
 jobs:
+  job-CI:
+      runs-on: ubuntu-latest
+      steps:
+      - name: Checkout repo
+        uses: actions/checkout@v3
+
+      - name: Uso do SonarCloud
+        uses: SonarSource/sonarcloud-github-action@master
+        env:
+            GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+            SONAR_TOKEN: ${{ secrets.SONARTOKEN }}
+
+      - name: Executando CD DEV
+        uses: actions/workflow-dispatch@v2
+        with:
+          workflow: workflowCD-DEV.yml
   job-CD:
+    needs: job-CI
     runs-on: ubuntu-latest
     steps:
+      - uses: actions/labeler@v4
+        with:
+          repo-token: ${{ secrets.TOKENGIT }}
+          configuration-path: ${{ inputs.config-path }}  
+
       - name: Setando conexao SSH do Google Cloud
         run: |
           mkdir -p ~/.ssh/	
