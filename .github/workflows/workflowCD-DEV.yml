@@ -67,22 +67,11 @@ jobs:
           scp -r gmusic google-cloud:/home/github/dev/
           ssh google-cloud 'sudo cp -r /home/github/dev/gmusic/* /usr/share/nginx/dev/'
           ssh google-cloud 'sudo systemctl start nginx'
-
-      - name: Uso do SonarCloud
-        uses: SonarSource/sonarcloud-github-action@master
-        env:
-            GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-            SONAR_TOKEN: ${{ secrets.SONARTOKEN }}
             
-  pull_request:
-      needs: job-CD
-      runs-on: ubuntu-latest
-      steps:
-        - name: Criação do pull request
-          uses: peter-evans/create-pull-request@v3
-          with:
-            token: ${{ secrets.GITHUB_TOKEN }}
-            branch: master
-            title: Gerando pull request para PROD
-            body: Pull request automatico
-    
+      - name: Fazendo pull request para a branch master
+        uses: peter-evans/create-pull-request@v3
+        with:
+          repository: jcarlospontes/Crud-Spring-Angular
+          base: master
+          head: release
+          title: "Criando pull request para master"
