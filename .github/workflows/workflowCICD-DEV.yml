@@ -18,10 +18,6 @@ jobs:
             GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
             SONAR_TOKEN: ${{ secrets.SONARTOKEN }}
 
-      - name: Executando CD DEV
-        uses: actions/workflow-dispatch@v2
-        with:
-          workflow: workflowCD-DEV.yml
   job-CD:
     needs: job-CI
     runs-on: ubuntu-latest
