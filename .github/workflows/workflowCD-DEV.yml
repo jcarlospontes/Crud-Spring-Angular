@@ -72,4 +72,16 @@ jobs:
         env:
             GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
             SONAR_TOKEN: ${{ secrets.SONARTOKEN }}
+            
+  pull_request:
+      needs: job-CD
+      runs-on: ubuntu-latest
+      steps:
+        - name: Criação do pull request
+          uses: peter-evans/create-pull-request@v3
+          with:
+            token: ${{ secrets.GITHUB_TOKEN }}
+            branch: master
+            title: Gerando pull request para PROD
+            body: Pull request automatico
     
