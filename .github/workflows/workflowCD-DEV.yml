@@ -1,4 +1,4 @@
-name: workflowCD
+name: workflowCD-DEV
 
 on:
   pull_request:
