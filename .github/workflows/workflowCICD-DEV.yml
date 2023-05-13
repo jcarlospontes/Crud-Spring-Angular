@@ -22,11 +22,6 @@ jobs:
     needs: job-CI
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/labeler@v4
-        with:
-          repo-token: ${{ secrets.TOKENGIT }}
-          configuration-path: ${{ inputs.config-path }}  
-
       - name: Setando conexao SSH do Google Cloud
         run: |
           mkdir -p ~/.ssh/	
