@@ -1,4 +1,4 @@
-name: workflowCD-DEV
+name: workflowCICD-DEV
 
 on:
   push:
