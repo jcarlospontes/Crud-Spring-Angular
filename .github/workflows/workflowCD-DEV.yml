@@ -50,7 +50,7 @@ jobs:
         run: |
           cd frontend/gmusic/src/app/components/login/
           agora="$(TZ=America/Sao_Paulo date -d now +'%c')"
-          sed -i '1 i\Ambiente de DEV '"$agora" login.component.html
+          sed -i '1 i\Ambiente DEV - '"$agora" login.component.html
       
       - name: Fazendo Build DEV
         run: |
