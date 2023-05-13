@@ -1,12 +1,9 @@
 name: workflowCI-DEV
 
 on:
-  push:
-    branches:
-      - feature-new
   pull_request:
     branches:
-      - feature-new
+      - release
   workflow_dispatch:
   
 defaults:
