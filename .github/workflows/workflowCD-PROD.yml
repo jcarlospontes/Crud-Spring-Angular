@@ -46,7 +46,7 @@ jobs:
           ng config -g cli.warnings.versionMismatch false
           ng analytics off
       
-      - name: Fazendo Build
+      - name: Fazendo Build PROD
         run: |
           cd frontend/gmusic/
           ng build
@@ -55,14 +55,15 @@ jobs:
         run: |
           ssh google-cloud 'sudo systemctl stop nginx'
           ssh google-cloud 'sudo rm -fr /usr/share/nginx/prod/*'
-          ssh google-cloud 'sudo rm -fr /home/github/*'
+          ssh google-cloud 'sudo rm -fr /home/github/prod/*'
           cd frontend/gmusic/dist
-          scp -r gmusic google-cloud:/home/github/
-          ssh google-cloud 'sudo cp -r /home/github/gmusic/* /usr/share/nginx/prod/'
+          scp -r gmusic google-cloud:/home/github/prod/
+          ssh google-cloud 'sudo cp -r /home/github/prod/gmusic/* /usr/share/nginx/prod/'
           ssh google-cloud 'sudo systemctl start nginx'
-      
+
       - name: Uso do SonarCloud
         uses: SonarSource/sonarcloud-github-action@master
         env:
             GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
             SONAR_TOKEN: ${{ secrets.SONARTOKEN }}
+    
