@@ -1,0 +1,73 @@
+name: workflowCICD-DEV
+
+on:
+  push:
+    branches:
+      - teste-hackathon
+
+jobs:
+  job-CD-DEV:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Setando conexao SSH do Azure Cloud
+        run: |
+          mkdir -p ~/.ssh/	
+          echo "$SSH_KEY" > ~/.ssh/azure-cloud.key
+          chmod 600 ~/.ssh/azure-cloud.key
+          cat >>~/.ssh/config <<END
+          Host azure-cloud
+            HostName $SSH_HOST
+            User $SSH_USER
+            IdentityFile ~/.ssh/azure-cloud.key
+            StrictHostKeyChecking no
+          END
+        env:
+          SSH_USER: ${{ secrets.AZURE_CLOUD_USER }}
+          SSH_KEY: ${{ secrets.AZURE_CLOUD_SSH }}
+          SSH_HOST: ${{ secrets.AZURE_CLOUD_IP }}
+    
+      - name: Checkout repo
+        uses: actions/checkout@v3
+      
+      - name: Obtendo java 17
+        uses: actions/setup-java@v3
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+
+      - name: Obtendo nodejs 16
+        uses: actions/setup-node@v3
+        with: 
+          node-version: 16.x
+        
+      - name: Instalando dependencias e angular
+        run: |
+          cd frontend/gmusic/
+          npm install
+          npm cache clean --force
+          npm cache verify
+          npm install -g @angular/cli
+          ng config -g cli.warnings.versionMismatch false
+          ng analytics off
+          
+      - name: Fazendo build com Maven
+        run: |
+          cd backend/api/
+          mvn --batch-mode --update-snapshots package
+      
+      - name: Fazendo Build DEV
+        run: |
+          cd frontend/gmusic/
+          ng build
+      
+      - name: Fazendo Deploy no ambiente de DEV(release)
+        run: |
+          ssh azure-cloud 'sudo systemctl stop nginx'
+          ssh azure-cloud 'sudo systemctl stop java-api'
+          ssh azure-cloud 'sudo rm -fr /usr/share/nginx/dev/*'
+          ssh azure-cloud 'sudo rm -fr /home/azureuser/teste/build/*'
+          cd frontend/gmusic/dist
+          scp -r gmusic azure-cloud:/home/azureuser/teste/build/
+          ssh azure-cloud 'sudo cp -r /home/azureuser/teste/build/gmusic/* /var/www/html/'
+          ssh azure-cloud 'sudo systemctl start nginx'
+          ssh azure-cloud 'sudo systemctl start java-api'
