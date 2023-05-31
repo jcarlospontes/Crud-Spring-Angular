@@ -81,5 +81,10 @@ jobs:
           cd frontend/gmusic/dist
           scp -r gmusic azure-cloud:/home/azureuser/teste/build/
           ssh azure-cloud 'sudo cp -r /home/azureuser/teste/build/gmusic/* /var/www/html/'
+          cd ..
+          cd ..
+          cd ..
+          cd backend/api/target
+          scp -r api-0.0.1-SNAPSHOT.jar azure-cloud:/home/azureuser/teste/
           ssh azure-cloud 'sudo systemctl start nginx'
           ssh azure-cloud 'sudo systemctl start java-api'
