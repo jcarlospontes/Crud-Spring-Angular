@@ -21,7 +21,7 @@ jobs:
         options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
         
     steps:
-      - name: Setando conexao SSH do Azure Cloud
+      - name: Setando conexao SSH do Azure Cloudd
         run: |
           mkdir -p ~/.ssh/	
           echo "$SSH_KEY" > ~/.ssh/azure-cloud.key
