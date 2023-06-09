@@ -1,9 +1,10 @@
-# Stage 1
-FROM node:14.15.4 as node
-WORKDIR /app
-COPY . .
+FROM node:19-alpine AS build
+WORKDIR /usr/src/app
+COPY package.json package-lock.json ./
 RUN npm install
-RUN npm run build --prod
-# Stage 2
-FROM nginx:alpine
-COPY --from=node /app/dist/gmusic /usr/share/nginx/html
+COPY . .
+RUN npm run build
+
+FROM nginx:1.23.2-alpine
+COPY ./nginx.conf /etc/nginx/nginx.conf
+COPY --from=build /dist/gmusic /usr/share/nginx/html
