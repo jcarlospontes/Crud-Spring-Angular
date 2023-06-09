@@ -1,10 +1,9 @@
-FROM node:latest
-
+# Stage 1
+FROM node:14.15.4 as node
 WORKDIR /app
-COPY . /app
-
+COPY . .
 RUN npm install
-RUN npm run build
-
-EXPOSE 4200
-CMD ["ng", "serve", "--host", "0.0.0.0"]
+RUN npm run build --prod
+# Stage 2
+FROM nginx:alpine
+COPY --from=node /app/dist/gmusic /usr/share/nginx/html
