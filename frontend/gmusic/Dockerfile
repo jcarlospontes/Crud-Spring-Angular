@@ -2,10 +2,12 @@ FROM node:18.16-alpine as node
 WORKDIR /app
 COPY . .
 RUN npm install
+RUN npm cache clean --force
+RUN npm cache verify
 RUN npm install -g @angular/cli
 RUN ng config -g cli.warnings.versionMismatch false
 RUN ng analytics off
-RUN ng build --prod
+RUN ng build
 
 FROM nginx:alpine
 COPY --from=node /app/dist/gmusic /usr/share/nginx/html
