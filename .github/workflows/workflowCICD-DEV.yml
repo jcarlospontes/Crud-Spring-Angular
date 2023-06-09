@@ -1,7 +1,7 @@
 name: workflowCICD-DEV
 
 on:
-  push:
+  pull_request:
     branches:
       - release
   
@@ -104,7 +104,7 @@ jobs:
 #          ssh google-cloud 'sudo systemctl start java-api'
           
           
-      - name: Deploy Docker
+      - name: Deploy Docker Spring
         env:
           DOCKER_USER: ${{ secrets.DOCKER_USER }}
           DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
@@ -112,3 +112,13 @@ jobs:
           docker login -u $DOCKER_USER -p $DOCKER_PASSWORD
           docker build ./backend/api -t $DOCKER_USER/projeto:latest
           docker push $DOCKER_USER/projeto:latest
+          
+      - name: Deploy Docker Angular
+        env:
+          DOCKER_USER: ${{ secrets.DOCKER_USER }}
+          DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
+        run: |
+          docker login -u $DOCKER_USER -p $DOCKER_PASSWORD
+          docker build ./frontend/gmusic -t $DOCKER_USER/angular:latest
+          docker push $DOCKER_USER/angular:latest
+  
