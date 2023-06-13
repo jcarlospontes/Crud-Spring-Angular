@@ -14,7 +14,7 @@ export class MusicService {
 
   public indexmusica:number = 0;
 
-  private url:string = 'http://34.72.223.89:8080';
+  private url:string = 'http://172.190.145.61:8080';
 
   public selecionando:boolean = false;
 
