@@ -1,9 +1,15 @@
-FROM golang:latest
+FROM golang:1.20 AS build
 
 WORKDIR /app
 
 COPY . .
 
-RUN go build -o main .
+# Compilação estática
+RUN CGO_ENABLED=0 GOOS=linux go build -ldflags "-s -w" -o main .
 
-CMD ["./main"]
+# Fase de execução
+FROM scratch
+
+COPY --from=build /app/main /
+
+CMD ["/main"]
