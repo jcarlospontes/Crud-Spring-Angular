@@ -1,14 +1,16 @@
 name: workflowCICD-DEV
 
 on:
-  pull_request:
+  push:
     branches:
       - release
   
 jobs:
+  #build e deploy da aplicacao  
   job-CD-DEV:
     runs-on: ubuntu-latest
     services:
+      #mysql para fazer build da api
       mysql:
         image: mysql:latest
         env:
@@ -19,25 +21,7 @@ jobs:
         ports:
           - 3306:3306
         options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
-        
     steps:
-      - name: Setando conexao SSH da Google Cloud
-        run: |
-          mkdir -p ~/.ssh/	
-          echo "$SSH_KEY" > ~/.ssh/google-cloud.key
-          chmod 600 ~/.ssh/google-cloud.key
-          cat >>~/.ssh/config <<END
-          Host google-cloud
-            HostName $SSH_HOST
-            User $SSH_USER
-            IdentityFile ~/.ssh/google-cloud.key
-            StrictHostKeyChecking no
-          END
-        env:
-          SSH_USER: ${{ secrets.GOOGLE_CLOUD_USER }}
-          SSH_KEY: ${{ secrets.GOOGLE_CLOUD_SSH }}
-          SSH_HOST: ${{ secrets.GOOGLE_CLOUD_IP }}
-    
       - name: Checkout repo
         uses: actions/checkout@v3
       
@@ -46,6 +30,11 @@ jobs:
         with:
           java-version: '17'
           distribution: 'temurin'
+
+      - name: Obtendo Go
+        uses: actions/setup-go@v4
+        with:
+          go-version: '1.15'
 
       - name: Obtendo nodejs 16
         uses: actions/setup-node@v3
@@ -62,7 +51,6 @@ jobs:
           ng config -g cli.warnings.versionMismatch false
           ng analytics off
           
-          
       - name: Setando properties
         run: |
           cat > backend/api/src/main/resources/application.properties << EOF
@@ -75,42 +63,39 @@ jobs:
         env:
           MYSQL_USER: ${{ secrets.MYSQL_USER }}
           MYSQL_PASS: ${{ secrets.MYSQL_PASS }}
-          
-      - name: Fazendo build com Maven
+    
+      - name: Fazendo build da api Spring Boot
         run: |
           cd backend/api/
           mvn --batch-mode --update-snapshots package
       
-      - name: Fazendo Build DEV
+      - name: Fazendo Build do Angular
         run: |
           cd frontend/gmusic/
           ng build
-      
-#      - name: Fazendo Deploy no ambiente de DEV(release)
-#        run: |
-#          ssh google-cloud 'sudo systemctl stop nginx'
-#          ssh google-cloud 'sudo systemctl stop java-api'
-#          ssh google-cloud 'sudo rm -fr /usr/share/nginx/dev/*'
-#          ssh google-cloud 'sudo rm -fr /home/azureuser/teste/build/*'
-#          cd frontend/gmusic/dist
-#          scp -r gmusic google-cloud:/home/azureuser/teste/build/
-#          ssh azure-cloud 'sudo cp -r /home/azureuser/teste/build/gmusic/* /var/www/html/'
-#          cd ..
-#          cd ..
-#          cd ..
-#          cd backend/api/target
-#          scp -r api-0.0.1-SNAPSHOT.jar azure-cloud:/home/azureuser/teste/
-#          ssh google-cloud 'sudo systemctl start nginx'
-#          ssh google-cloud 'sudo systemctl start java-api'
           
-          
-      - name: Deploy Docker Spring
+      - name: Fazendo Build do Go
+        run: |
+          cd backend/go-crud-api/
+          go build
+    
+      #Push de imagens da aplicação
+      - name: Deploy Docker Spring API
         env:
           DOCKER_USER: ${{ secrets.DOCKER_USER }}
           DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
         run: |
           docker login -u $DOCKER_USER -p $DOCKER_PASSWORD
           docker build ./backend/api -t $DOCKER_USER/projeto:latest
+          docker push $DOCKER_USER/projeto:latest
+          
+      - name: Deploy Docker Go API
+        env:
+          DOCKER_USER: ${{ secrets.DOCKER_USER }}
+          DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
+        run: |
+          docker login -u $DOCKER_USER -p $DOCKER_PASSWORD
+          docker build ./backend/go-crud-api -t $DOCKER_USER/apigo:latest
           docker push $DOCKER_USER/projeto:latest
           
       - name: Deploy Docker Angular
@@ -121,4 +106,39 @@ jobs:
           docker login -u $DOCKER_USER -p $DOCKER_PASSWORD
           docker build ./frontend/gmusic -t $DOCKER_USER/angular:latest
           docker push $DOCKER_USER/angular:latest
-  
+          
+          
+      - name: Setando conexao SSH da Azure
+        run: |
+          mkdir -p ~/.ssh/	
+          echo "$SSH_KEY" > ~/.ssh/azure-cloud.key
+          chmod 600 ~/.ssh/azure-cloud.key
+          cat >>~/.ssh/config <<END
+          Host azure-cloud
+            HostName $SSH_HOST
+            User $SSH_USER
+            IdentityFile ~/.ssh/azure-cloud.key
+            StrictHostKeyChecking no
+          END
+        env:
+          SSH_USER: ${{ secrets.AZURE_CLOUD_USER }}
+          SSH_KEY: ${{ secrets.AZURE_CLOUD_SSH }}
+          SSH_HOST: ${{ secrets.AZURE_CLOUD_IP }}
+          
+          
+#      - name: Fazendo Deploy no ambiente de DEV(release)
+#        run: |
+#          ssh azure-cloud 'sudo systemctl stop nginx'
+#          ssh azure-cloud 'sudo systemctl stop java-api'
+#          ssh azure-cloud 'sudo rm -fr /usr/share/nginx/dev/*'
+#          ssh azure-cloud 'sudo rm -fr /home/azureuser/teste/build/*'
+#          cd frontend/gmusic/dist
+#          scp -r gmusic azure-cloud:/home/azureuser/teste/build/
+#          ssh azure-cloud 'sudo cp -r /home/azureuser/teste/build/gmusic/* /var/www/html/'
+#          cd ..
+#          cd ..
+#          cd ..
+#          cd backend/api/target
+#          scp -r api-0.0.1-SNAPSHOT.jar azure-cloud:/home/azureuser/teste/
+#          ssh azure-cloud 'sudo systemctl start nginx'
+#          ssh azure-cloud 'sudo systemctl start java-api'  
