@@ -25,31 +25,31 @@ jobs:
       - name: Checkout repo
         uses: actions/checkout@v3
       
-      - name: Obtendo java 17
-        uses: actions/setup-java@v3
-        with:
-          java-version: '17'
-          distribution: 'temurin'
+ #     - name: Obtendo java 17
+ #       uses: actions/setup-java@v3
+ #       with:
+ #         java-version: '17'
+ #         distribution: 'temurin'
 
       - name: Obtendo Go
         uses: actions/setup-go@v4
         with:
-          go-version: '1.15'
+          go-version: '1.20'
 
-      - name: Obtendo nodejs 16
-        uses: actions/setup-node@v3
-        with: 
-          node-version: 16.x
+#      - name: Obtendo nodejs 16
+#        uses: actions/setup-node@v3
+#        with: 
+#          node-version: 16.x
         
-      - name: Instalando dependencias e angular
-        run: |
-          cd frontend/gmusic/
-          npm install
-          npm cache clean --force
-          npm cache verify
-          npm install -g @angular/cli
-          ng config -g cli.warnings.versionMismatch false
-          ng analytics off
+#      - name: Instalando dependencias e angular
+#        run: |
+#          cd frontend/gmusic/
+#          npm install
+#          npm cache clean --force
+#          npm cache verify
+#          npm install -g @angular/cli
+#          ng config -g cli.warnings.versionMismatch false
+#          ng analytics off
           
       - name: Setando properties
         run: |
@@ -64,15 +64,15 @@ jobs:
           MYSQL_USER: ${{ secrets.MYSQL_USER }}
           MYSQL_PASS: ${{ secrets.MYSQL_PASS }}
     
-      - name: Fazendo build da api Spring Boot
-        run: |
-          cd backend/api/
-          mvn --batch-mode --update-snapshots package
+  #    - name: Fazendo build da api Spring Boot
+  #      run: |
+  #        cd backend/api/
+  #        mvn --batch-mode --update-snapshots package
       
-      - name: Fazendo Build do Angular
-        run: |
-          cd frontend/gmusic/
-          ng build
+   #   - name: Fazendo Build do Angular
+   #     run: |
+   #       cd frontend/gmusic/
+   #       ng build
           
       - name: Fazendo Build do Go
         run: |
@@ -80,14 +80,14 @@ jobs:
           go build
     
       #Push de imagens da aplicação
-      - name: Deploy Docker Spring API
-        env:
-          DOCKER_USER: ${{ secrets.DOCKER_USER }}
-          DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
-        run: |
-          docker login -u $DOCKER_USER -p $DOCKER_PASSWORD
-          docker build ./backend/api -t $DOCKER_USER/projeto:latest
-          docker push $DOCKER_USER/projeto:latest
+    #  - name: Deploy Docker Spring API
+    #    env:
+    #      DOCKER_USER: ${{ secrets.DOCKER_USER }}
+    #      DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
+    #    run: |
+    #      docker login -u $DOCKER_USER -p $DOCKER_PASSWORD
+    #      docker build ./backend/api -t $DOCKER_USER/projeto:latest
+    #      docker push $DOCKER_USER/projeto:latest
           
       - name: Deploy Docker Go API
         env:
@@ -98,14 +98,14 @@ jobs:
           docker build ./backend/go-crud-api -t $DOCKER_USER/apigo:latest
           docker push $DOCKER_USER/projeto:latest
           
-      - name: Deploy Docker Angular
-        env:
-          DOCKER_USER: ${{ secrets.DOCKER_USER }}
-          DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
-        run: |
-          docker login -u $DOCKER_USER -p $DOCKER_PASSWORD
-          docker build ./frontend/gmusic -t $DOCKER_USER/angular:latest
-          docker push $DOCKER_USER/angular:latest
+     # - name: Deploy Docker Angular
+     #   env:
+     #     DOCKER_USER: ${{ secrets.DOCKER_USER }}
+     #     DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
+     #   run: |
+     #     docker login -u $DOCKER_USER -p $DOCKER_PASSWORD
+     #     docker build ./frontend/gmusic -t $DOCKER_USER/angular:latest
+     #     docker push $DOCKER_USER/angular:latest
           
           
       - name: Setando conexao SSH da Azure
