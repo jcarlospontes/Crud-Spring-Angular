@@ -1,7 +1,7 @@
 name: workflowCICD-DEV
 
 on:
-  pull_request:
+  push:
     branches:
       - release
   
@@ -9,18 +9,18 @@ jobs:
   #build e deploy da aplicacao  
   job-CD-DEV:
     runs-on: ubuntu-latest
-    services:
-      #mysql para fazer build da api
-      mysql:
-        image: mysql:latest
-        env:
-          MYSQL_DATABASE: dchat
-          MYSQL_USER: ${{ secrets.MYSQL_USER }}
-          MYSQL_PASSWORD: ${{ secrets.MYSQL_PASS }}
-          MYSQL_ROOT_PASSWORD: ${{ secrets.MYSQL_PASS }}
-        ports:
-          - 3306:3306
-        options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
+#    services:
+#      #mysql para fazer build da api
+#      mysql:
+#        image: mysql:latest
+#        env:
+#          MYSQL_DATABASE: dchat
+#          MYSQL_USER: ${{ secrets.MYSQL_USER }}
+#          MYSQL_PASSWORD: ${{ secrets.MYSQL_PASS }}
+#          MYSQL_ROOT_PASSWORD: ${{ secrets.MYSQL_PASS }}
+#        ports:
+#          - 3306:3306
+#        options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
     steps:
       - name: Checkout repo
         uses: actions/checkout@v3
