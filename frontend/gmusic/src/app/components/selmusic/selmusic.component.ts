@@ -9,9 +9,9 @@ import { MusicService } from 'src/app/services/music.service';
 })
 export class SelmusicComponent implements OnInit{
 
-  nome_musica:string = this.musicService.music.nm_musica;
-  nome_artista:string = this.musicService.music.nm_autor;
-  nome_genero:string = this.musicService.music.nm_genero;
+  nome_musica:string = this.musicService.music.Musica;
+  nome_artista:string = this.musicService.music.Autor;
+  nome_genero:string = this.musicService.music.Genero;
 
   nome:boolean = true;
   artista:boolean = true;
@@ -88,10 +88,10 @@ export class SelmusicComponent implements OnInit{
 
       this.selecionar();
       this.music = this.musicService.music;
-      this.musicService.remover(this.music.id_musica).subscribe(retorno => {
+      this.musicService.remover(this.music.ID).subscribe(retorno => {
         
         let posicao = this.musicas.findIndex(obj => {
-          return obj.id_musica == this.music.id_musica;
+          return obj.ID == this.music.ID;
         });
 
         this.musicas.splice(posicao, 1);
@@ -111,12 +111,12 @@ export class SelmusicComponent implements OnInit{
   editar():void{
     this.selecionar();
     this.music = this.musicService.music;
-    this.music.nm_musica = this.nome_musica;
-    this.music.nm_autor = this.nome_artista;
-    this.music.nm_genero = this.nome_genero;
+    this.music.Musica = this.nome_musica;
+    this.music.Autor = this.nome_artista;
+    this.music.Genero = this.nome_genero;
     this.musicService.editar(this.music).subscribe(retorno => {
       let index = this.musicas.findIndex(obj => {
-        return obj.id_musica == retorno.id_musica;
+        return obj.ID == retorno.ID;
       });
 
       this.musicas[index] = retorno;

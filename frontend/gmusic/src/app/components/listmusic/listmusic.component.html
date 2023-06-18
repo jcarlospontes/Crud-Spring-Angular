@@ -14,9 +14,9 @@
         <tbody>
             <tr *ngFor="let m of musics; index as i">
                 <td>{{i+1}}</td>
-                <td>{{m.nm_musica}}</td>
-                <td>{{m.nm_autor}}</td>
-                <td>{{m.nm_genero}}</td>
+                <td>{{m.Musica}}</td>
+                <td>{{m.Autor}}</td>
+                <td>{{m.Genero}}</td>
                 <td><button class="btn btn-light" (click)="editar(i)">Selecionar</button></td>
             </tr>
         </tbody>

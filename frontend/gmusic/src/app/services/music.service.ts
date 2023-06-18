@@ -34,12 +34,12 @@ export class MusicService {
     return this.http.post<Music>(this.url, obj);
   }
 
-  remover(id_musica:number):Observable<void>{
-    return this.http.delete<void>(this.url + '/' + id_musica);
+  remover(ID:number):Observable<void>{
+    return this.http.delete<void>(this.url + '/' + ID);
   }
 
 
   getcod():number{
-    return this.music.id_musica;
+    return this.music.ID;
   }
 }
