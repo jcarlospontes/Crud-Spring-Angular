@@ -36,20 +36,20 @@ jobs:
         with:
           go-version: '1.20'
 
-#      - name: Obtendo nodejs 16
-#        uses: actions/setup-node@v3
-#        with: 
-#          node-version: 16.x
+      - name: Obtendo nodejs 16
+        uses: actions/setup-node@v3
+        with: 
+          node-version: 16.x
         
-#      - name: Instalando dependencias e angular
-#        run: |
-#          cd frontend/gmusic/
-#          npm install
-#          npm cache clean --force
-#          npm cache verify
-#          npm install -g @angular/cli
-#          ng config -g cli.warnings.versionMismatch false
-#          ng analytics off
+      - name: Instalando dependencias e angular
+        run: |
+          cd frontend/gmusic/
+          npm install
+          npm cache clean --force
+          npm cache verify
+          npm install -g @angular/cli
+          ng config -g cli.warnings.versionMismatch false
+          ng analytics off
           
       - name: Setando properties
         run: |
@@ -69,10 +69,10 @@ jobs:
   #        cd backend/api/
   #        mvn --batch-mode --update-snapshots package
       
-   #   - name: Fazendo Build do Angular
-   #     run: |
-   #       cd frontend/gmusic/
-   #       ng build
+      - name: Fazendo Build do Angular
+        run: |
+          cd frontend/gmusic/
+          ng build
           
       - name: Fazendo Build do Go
         run: |
@@ -98,14 +98,14 @@ jobs:
           docker build ./backend/go-crud-api -t $DOCKER_USER/apigo:latest
           docker push $DOCKER_USER/apigo:latest
           
-     # - name: Deploy Docker Angular
-     #   env:
-     #     DOCKER_USER: ${{ secrets.DOCKER_USER }}
-     #     DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
-     #   run: |
-     #     docker login -u $DOCKER_USER -p $DOCKER_PASSWORD
-     #     docker build ./frontend/gmusic -t $DOCKER_USER/angular:latest
-     #     docker push $DOCKER_USER/angular:latest
+      - name: Deploy Docker Angular
+        env:
+          DOCKER_USER: ${{ secrets.DOCKER_USER }}
+          DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
+        run: |
+          docker login -u $DOCKER_USER -p $DOCKER_PASSWORD
+          docker build ./frontend/gmusic -t $DOCKER_USER/angular:latest
+          docker push $DOCKER_USER/angular:latest
           
           
       - name: Setando conexao SSH da Azure
