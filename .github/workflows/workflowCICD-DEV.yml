@@ -1,7 +1,7 @@
 name: workflowCICD-DEV
 
 on:
-  push:
+  pull_request:
     branches:
       - release
   
