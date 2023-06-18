@@ -1,11 +1,11 @@
 export class Music{
 
-    id_musica:number = 0;
+    ID:number = 0;
 
-    nm_musica:string = '';
+    Musica:string = '';
 
-    nm_autor:string = '';
+    Autor:string = '';
 
-    nm_genero:string = '';
+    Genero:string = '';
 
 }

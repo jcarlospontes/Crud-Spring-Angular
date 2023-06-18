@@ -78,9 +78,9 @@ export class CadmusicComponent implements OnInit {
 
   cadastrar():void{
     if(this.cadastro){
-      this.music.nm_autor = this.nome_artista;
-      this.music.nm_musica = this.nome_musica;
-      this.music.nm_genero = this.nome_genero;
+      this.music.Autor = this.nome_artista;
+      this.music.Musica = this.nome_musica;
+      this.music.Genero = this.nome_genero;
   
       this.musicService.cadastrar(this.music).subscribe(retorno => {this.musics.push(retorno);});
 
