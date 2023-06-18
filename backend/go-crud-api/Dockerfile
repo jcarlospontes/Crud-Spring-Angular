@@ -1,15 +1,11 @@
-FROM golang:1.20 AS build
+FROM 1.20.5-alpine3.18
 
 WORKDIR /app
 
 COPY . .
 
-# Compilação estática
-RUN CGO_ENABLED=0 GOOS=linux go build -ldflags "-s -w" -o main .
+RUN go build -o main main.go
 
-# Fase de execução
-FROM scratch
+EXPOSE 8080
 
-COPY --from=build /app/main /
-
-CMD ["/main"]
+CMD ["/app/main"]
