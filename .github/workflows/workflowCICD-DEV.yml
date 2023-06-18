@@ -60,9 +60,15 @@ jobs:
           spring.datasource.password=$MYSQL_PASS
           spring.datasource.driver-class-name=com.mysql.cj.jdbc.Driver
           EOF
+          cat > backend/go-crud-api/.env << EOF
+          PORT=8080
+          DB_URL=$DB_URL
+          EOF
         env:
           MYSQL_USER: ${{ secrets.MYSQL_USER }}
           MYSQL_PASS: ${{ secrets.MYSQL_PASS }}
+          DB_URL: ${{ secrets.DBURL }}
+          
     
   #    - name: Fazendo build da api Spring Boot
   #      run: |
@@ -108,37 +114,44 @@ jobs:
           docker push $DOCKER_USER/angular:latest
           
           
-      - name: Setando conexao SSH da Azure
+      - name: Setando conexao SSH da maquina do front e do back
         run: |
           mkdir -p ~/.ssh/	
-          echo "$SSH_KEY" > ~/.ssh/azure-cloud.key
-          chmod 600 ~/.ssh/azure-cloud.key
+          echo "$SSH_KEY_FRONT" > ~/.ssh/azure-front-cloud.key
+          echo "$SSH_KEY_BACK" > ~/.ssh/azure-back-cloud.key
+          chmod 600 ~/.ssh/azure-front-cloud.key
+          chmod 600 ~/.ssh/azure-back-cloud.key
           cat >>~/.ssh/config <<END
-          Host azure-cloud
-            HostName $SSH_HOST
-            User $SSH_USER
-            IdentityFile ~/.ssh/azure-cloud.key
+          Host azure-front-cloud
+            HostName $SSH_HOST_FRONT
+            User $SSH_USER_FRONT
+            IdentityFile ~/.ssh/azure-front-cloud.key
+            StrictHostKeyChecking no
+          Host azure-back-cloud
+            HostName $SSH_HOST_BACK
+            User $SSH_USER_BACK
+            IdentityFile ~/.ssh/azure-back-cloud.key
             StrictHostKeyChecking no
           END
         env:
-          SSH_USER: ${{ secrets.AZURE_CLOUD_USER }}
-          SSH_KEY: ${{ secrets.AZURE_CLOUD_SSH }}
-          SSH_HOST: ${{ secrets.AZURE_CLOUD_IP }}
+          SSH_USER_FRONT: ${{ secrets.AZURE_FRONT_CLOUD_USER }}
+          SSH_KEY_FRONT: ${{ secrets.AZURE_FRONT_CLOUD_SSH }}
+          SSH_HOST_FRONT: ${{ secrets.AZURE_FRONT_CLOUD_IP }}
+          SSH_USER_BACK: ${{ secrets.AZURE_BACK_CLOUD_USER }}
+          SSH_KEY_BACK: ${{ secrets.AZURE_BACK_CLOUD_SSH }}
+          SSH_HOST_BACK: ${{ secrets.AZURE_BACK_CLOUD_IP }}
           
+      - name: Fazendo Deploy do back
+        run: |
+          ssh azure-back-cloud 'sudo docker-compose down'
+          ssh azure-back-cloud 'sudo docker rmi joaocarlosp/apigo'
+          ssh azure-back-cloud 'sudo docker pull joaocarlosp/apigo'
+          ssh azure-back-cloud 'sudo docker-compose up -d'
           
-#      - name: Fazendo Deploy no ambiente de DEV(release)
-#        run: |
-#          ssh azure-cloud 'sudo systemctl stop nginx'
-#          ssh azure-cloud 'sudo systemctl stop java-api'
-#          ssh azure-cloud 'sudo rm -fr /usr/share/nginx/dev/*'
-#          ssh azure-cloud 'sudo rm -fr /home/azureuser/teste/build/*'
-#          cd frontend/gmusic/dist
-#          scp -r gmusic azure-cloud:/home/azureuser/teste/build/
-#          ssh azure-cloud 'sudo cp -r /home/azureuser/teste/build/gmusic/* /var/www/html/'
-#          cd ..
-#          cd ..
-#          cd ..
-#          cd backend/api/target
-#          scp -r api-0.0.1-SNAPSHOT.jar azure-cloud:/home/azureuser/teste/
-#          ssh azure-cloud 'sudo systemctl start nginx'
-#          ssh azure-cloud 'sudo systemctl start java-api'  
+      - name: Fazendo Deploy do front
+        run: |
+          ssh azure-front-cloud 'sudo docker stop angular'
+          ssh azure-front-cloud 'sudo docker rm angular'
+          ssh azure-front-cloud 'sudo docker rmi joaocarlosp/angular'
+          ssh azure-front-cloud 'sudo docker pull joaocarlosp/angular:latest'
+          ssh azure-front-cloud 'sudo docker run --name angular -d -p 4200:80 joaocarlosp/angular:latest'
