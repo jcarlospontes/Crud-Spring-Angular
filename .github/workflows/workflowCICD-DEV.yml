@@ -96,7 +96,7 @@ jobs:
         run: |
           docker login -u $DOCKER_USER -p $DOCKER_PASSWORD
           docker build ./backend/go-crud-api -t $DOCKER_USER/apigo:latest
-          docker push $DOCKER_USER/projeto:latest
+          docker push $DOCKER_USER/apigo:latest
           
      # - name: Deploy Docker Angular
      #   env:
