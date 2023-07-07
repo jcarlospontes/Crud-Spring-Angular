@@ -14,7 +14,7 @@ export class MusicService {
 
   public indexmusica:number = 0;
 
-  private url:string = 'http://api-container:8080';
+  private url:string = 'http://api-container:80';
 
   public selecionando:boolean = false;
 
